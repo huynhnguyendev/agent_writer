@@ -355,6 +355,29 @@ def run(
         exist_ok=True,
     )
 
+    # --------------------------------------------------------
+    # Tạo folder blog/ để lưu các bài Markdown được sinh ra.
+    #
+    # Nếu folder đã tồn tại:
+    #     → không làm gì.
+    #
+    # Nếu chưa tồn tại:
+    #     → tự động tạo.
+    #
+    # Folder này nằm ở project root.
+    # --------------------------------------------------------
+
+    project_root = Path(
+        __file__
+    ).resolve().parent.parent
+
+    blog_dir = project_root / "blog"
+
+    blog_dir.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
     # Xác định ngôn ngữ đầu ra một lần ở đầu workflow.
     # Sau đó truyền xuống Planner/Worker/Image planner để tránh lẫn ngôn ngữ.
     language = detect_output_language(topic)

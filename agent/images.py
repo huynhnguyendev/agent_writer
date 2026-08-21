@@ -347,8 +347,23 @@ def generate_and_place_images(
         )
 
     # --------------------------------------------------------
-    # Save final Markdown
+    # Save final Markdown vào folder blog/
     # --------------------------------------------------------
+
+    project_root = (
+        Path(__file__)
+        .resolve()
+        .parent.parent
+    )
+
+    blog_dir = (
+        project_root / "blog"
+    )
+
+    blog_dir.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
 
     filename = (
         safe_filename(
@@ -357,8 +372,8 @@ def generate_and_place_images(
         + ".md"
     )
 
-    output_path = Path(
-        filename
+    output_path = (
+        blog_dir / filename
     )
 
     output_path.write_text(
