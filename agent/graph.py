@@ -4,6 +4,7 @@ from typing import Optional
 
 import os
 import psycopg
+import uuid
 from psycopg.rows import dict_row
 from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.postgres import PostgresSaver
@@ -285,25 +286,7 @@ app = g.compile(
 )
 
 # ============================================================
-# 16. CONFIG
-# ============================================================
-#
-# thread_id dùng để LangGraph biết:
-#
-#     "Đây là conversation / workflow nào?"
-#
-# PostgreSQL sẽ lưu checkpoint dựa trên thread này.
-#
-# ============================================================
-
-config = {
-    "configurable": {
-        "thread_id": "test_thread_id_2"
-    }
-}
-
-# ============================================================
-# 17. RUNNER
+# 16. RUNNER
 # ============================================================
 
 def detect_output_language(text: str) -> str:
@@ -340,6 +323,15 @@ def run(
     # lấy ngày hiện tại.
     if as_of is None:
         as_of = date.today().isoformat()
+
+    # Generate một thread_id mới cho mỗi workflow run.
+    thread_id = str(uuid.uuid4())
+
+    config = {
+        "configurable": {
+            "thread_id": thread_id
+        }
+    }
 
     # --------------------------------------------------------
     # Giữ folder images/ cho tương lai.
